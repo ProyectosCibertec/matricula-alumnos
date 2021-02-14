@@ -1,0 +1,699 @@
+package guis;
+
+
+
+
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+
+import javax.swing.border.BevelBorder;
+
+import javax.swing.table.DefaultTableModel;
+import arreglos.*;
+import clases.*;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import java.awt.Font;
+import java.awt.Color;
+
+import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.Toolkit;
+import javax.swing.UIManager;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+
+public class DlgCurso extends JDialog implements ActionListener, WindowListener, KeyListener, MouseListener {
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+    private JPanel panel;
+    private JLabel label;
+    private JLabel lblMantenimientoDeCursos;
+    private JLabel lblAsignatura;
+    private JLabel lblCiclo;
+    private JLabel lblCrditos;
+    private JLabel lblHoras;
+    private JTextField txtCodigo;
+    private JTextField txtAsignatura;
+    private JTextField txtCreditos;
+    private JTextField txtHoras;
+    private JButton btnBuscar_1;
+    private JButton btnAceptar_1;
+    private JButton btnConsultar;
+    private JLabel label_7;
+    private JButton btnModificar;
+    private JButton btnEliminar;
+    private JComboBox<?> cboCiclo;
+    private JButton btnAdicionar;
+    private JScrollPane scrollPane;
+    private JTable table;
+    private DefaultTableModel modelo;
+    ArregloAlumno aa;
+    ArregloMatricula am;
+    ArregloCurso ac;
+    ArregloRetiro ar;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        try {
+            DlgCurso dialog = new DlgCurso();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Create the dialog.
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public DlgCurso() {
+    	addWindowListener(this);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(DlgCurso.class.getResource("/img/aprender-en-linea.png")));
+        getContentPane().setBackground(new Color(0, 51, 102));
+
+        lblMantenimientoDeCursos = new JLabel("MANTENIMIENTO DE CURSOS");
+        lblMantenimientoDeCursos.setForeground(new Color(235, 242, 248));
+        lblMantenimientoDeCursos.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblMantenimientoDeCursos.setBounds(474, 11, 344, 34);
+        getContentPane().add(lblMantenimientoDeCursos);
+
+
+
+        btnConsultar = new JButton("Consultar");
+        btnConsultar.addMouseListener(this);
+        btnConsultar.addActionListener(this);
+
+        btnConsultar.setBackground(UIManager.getColor("Button.background"));
+        btnConsultar.setFont(new Font("Tahoma", Font.BOLD, 13));
+        btnConsultar.setBounds(358, 105, 174, 25);
+        getContentPane().add(btnConsultar);
+
+        
+        setTitle("Mantenimiento | Curso");
+        setBounds(100, 100, 1311, 357);
+        getContentPane().setLayout(null);
+
+        panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+        panel.setBackground(new Color(235, 242, 248));
+        panel.setBounds(12, 58, 334, 239);
+        getContentPane().add(panel);
+
+        label = new JLabel("C\u00F3digo:");
+        label.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        label.setBounds(12, 13, 56, 22);
+        panel.add(label);
+
+        lblAsignatura = new JLabel("Asignatura:");
+        lblAsignatura.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        lblAsignatura.setBounds(12, 55, 73, 28);
+        panel.add(lblAsignatura);
+
+        lblCiclo = new JLabel("Ciclo:");
+        lblCiclo.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        lblCiclo.setBounds(12, 108, 73, 25);
+        panel.add(lblCiclo);
+
+        lblCrditos = new JLabel("Cr\u00E9ditos:");
+        lblCrditos.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        lblCrditos.setBounds(12, 158, 73, 27);
+        panel.add(lblCrditos);
+
+        lblHoras = new JLabel("Horas:");
+        lblHoras.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        lblHoras.setBounds(12, 210, 56, 16);
+        panel.add(lblHoras);
+
+        txtCodigo = new JTextField();
+        txtCodigo.addKeyListener(this);
+        txtCodigo.setEditable(false);
+        txtCodigo.setColumns(10);
+        txtCodigo.setBounds(95, 13, 116, 25);
+        panel.add(txtCodigo);
+
+        txtAsignatura = new JTextField();
+        txtAsignatura.setEditable(false);
+        txtAsignatura.setColumns(10);
+        txtAsignatura.setBounds(97, 58, 225, 25);
+        panel.add(txtAsignatura);
+
+        txtCreditos = new JTextField();
+        txtCreditos.addKeyListener(this);
+        txtCreditos.setEditable(false);
+        txtCreditos.setColumns(10);
+        txtCreditos.setBounds(97, 160, 54, 25);
+        panel.add(txtCreditos);
+
+        txtHoras = new JTextField();
+        txtHoras.addKeyListener(this);
+        txtHoras.setEditable(false);
+        txtHoras.setColumns(10);
+        txtHoras.setBounds(95, 201, 56, 25);
+        panel.add(txtHoras);
+
+        btnBuscar_1 = new JButton("Buscar");
+        btnBuscar_1.setEnabled(false);
+        btnBuscar_1.addActionListener(this);
+        btnBuscar_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+        btnBuscar_1.setBackground(UIManager.getColor("Button.background"));
+        btnBuscar_1.setBounds(223, 13, 97, 25);
+        panel.add(btnBuscar_1);
+
+        btnAceptar_1 = new JButton("Aceptar");
+        btnAceptar_1.setEnabled(false);
+        btnAceptar_1.addActionListener(this);
+        btnAceptar_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+        btnAceptar_1.setBackground(UIManager.getColor("Button.background"));
+        btnAceptar_1.setBounds(223, 201, 97, 25);
+        panel.add(btnAceptar_1);
+
+        cboCiclo = new JComboBox();
+        cboCiclo.setBackground(UIManager.getColor("Button.background"));
+        cboCiclo.setFont(new Font("Tahoma", Font.BOLD, 13));
+        cboCiclo.setModel(new DefaultComboBoxModel(new String[] {
+            "Primero",
+            "Segundo",
+            "Tercero",
+            "Cuarto",
+            "Quinto",
+            "Sexto"
+        }));
+        cboCiclo.setBounds(97, 110, 126, 22);
+        panel.add(cboCiclo);
+
+        label_7 = new JLabel("");
+        label_7.setIcon(new ImageIcon(DlgCurso.class.getResource("/img/logo-cibertec.png")));
+        label_7.setBounds(379, 118, 136, 113);
+        getContentPane().add(label_7);
+
+        btnModificar = new JButton("Modificar");
+        btnModificar.addMouseListener(this);
+        btnModificar.addActionListener(this);
+        btnModificar.setFont(new Font("Tahoma", Font.BOLD, 13));
+        btnModificar.setBackground(UIManager.getColor("Button.background"));
+        btnModificar.setBounds(356, 227, 172, 25);
+        getContentPane().add(btnModificar);
+
+        btnEliminar = new JButton("Eliminar");
+        btnEliminar.addMouseListener(this);
+        btnEliminar.addActionListener(this);
+        btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 13));
+        btnEliminar.setBackground(UIManager.getColor("Button.background"));
+        btnEliminar.setBounds(358, 272, 172, 25);
+        getContentPane().add(btnEliminar);
+
+        btnAdicionar = new JButton("Adicionar");
+        btnAdicionar.addMouseListener(this);
+        btnAdicionar.addActionListener(this);
+        btnAdicionar.setFont(new Font("Tahoma", Font.BOLD, 13));
+        btnAdicionar.setBackground(UIManager.getColor("Button.background"));
+        btnAdicionar.setBounds(356, 58, 176, 25);
+        getContentPane().add(btnAdicionar);
+
+        scrollPane = new JScrollPane();
+        scrollPane.setBounds(542, 56, 743, 241);
+        getContentPane().add(scrollPane);
+
+        table = new JTable();
+        table.setFillsViewportHeight(true);
+        scrollPane.setViewportView(table);
+        modelo = new DefaultTableModel();
+        modelo.addColumn("Codigo");
+        modelo.addColumn("Asignatura");
+        modelo.addColumn("Ciclo");
+        modelo.addColumn("Crédito");
+        modelo.addColumn("Hora");
+        table.setModel(modelo);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnAceptar_1) {
+            actionPerformedBtnAceptar_1(e);
+        }
+        if (e.getSource() == btnBuscar_1) {
+            actionPerformedBtnBuscar_1(e);
+        }
+        if (e.getSource() == btnEliminar) {
+            actionPerformedBtnEliminar(e);
+        }
+        if (e.getSource() == btnModificar) {
+            actionPerformedBtnModificar(e);
+        }
+        if (e.getSource() == btnConsultar) {
+            actionPerformedBtnConsultar(e);
+        }
+        if (e.getSource() == btnAdicionar) {
+            actionPerformedBtnAdicionar(e);
+        }
+    }
+    
+    //BOTÓN ADICIONAR
+    
+    protected void actionPerformedBtnAdicionar(ActionEvent e) {
+        limpieza();
+        botonesPanel2(true);
+        editarEntradas(true);
+        btnAceptar_1.setEnabled(true);
+        btnAdicionar.setEnabled(false);
+        btnBuscar_1.setEnabled(false);
+    }
+    
+    //BOTÓN CONSULTAR
+    
+    protected void actionPerformedBtnConsultar(ActionEvent e) {
+    	limpieza();
+    	habilitarBotones(true);
+        btnAceptar_1.setEnabled(false);
+        btnConsultar.setEnabled(false);
+        editarEntradas(false);
+        txtCodigo.setEditable(true);
+    }
+    
+    //BOTÓN MODIFICAR
+    
+    protected void actionPerformedBtnModificar(ActionEvent e) {
+        limpieza();
+        habilitarBotones(true);
+        btnModificar.setEnabled(false);
+        btnAceptar_1.setEnabled(false);
+        editarEntradas(false);
+        txtCodigo.setEditable(true);
+       
+    }
+    
+    //BOTON ELIMINAR
+    
+    protected void actionPerformedBtnEliminar(ActionEvent e) {
+    	limpieza();
+    	habilitarBotones(true);
+        btnAceptar_1.setEnabled(false);
+        btnEliminar.setEnabled(false);
+        editarEntradas(false);
+        txtCodigo.setEditable(true);
+    }
+
+    //BOTÓN BUSCAR
+    
+	protected void actionPerformedBtnBuscar_1(ActionEvent e) {
+        try {
+            int codcurso = leerCodigo();
+            if (btnConsultar.isEnabled() == false) {
+                if (ArregloCurso.buscar(codcurso) != null) {
+                    txtCodigo.setText("" + ArregloCurso.buscar(codcurso).getCodCurso());
+                    txtHoras.setText("" + ArregloCurso.buscar(codcurso).getHoras());
+                    txtAsignatura.setText("" + ArregloCurso.buscar(codcurso).getAsignaturas());
+                    txtCreditos.setText("" + ArregloCurso.buscar(codcurso).getCreditos());
+                    cboCiclo.setSelectedIndex(ArregloCurso.buscar(codcurso).getCiclo());
+                    editarEntradas(false);
+                    habilitarBotones(true);
+                    btnAceptar_1.setEnabled(false);
+                    btnBuscar_1.setEnabled(false);
+                }
+            }
+            if(btnModificar.isEnabled()== false){
+                if (ArregloCurso.buscar(codcurso) != null) {
+                    txtAsignatura.setText("" + ArregloCurso.buscar(codcurso).getAsignaturas());
+                    txtHoras.setText("" + ArregloCurso.buscar(codcurso).getHoras());
+                    txtCreditos.setText("" + ArregloCurso.buscar(codcurso).getCreditos());
+                    cboCiclo.setSelectedIndex(ArregloCurso.buscar(codcurso).getCiclo());
+                    habilitarBotones(true);
+                    btnBuscar_1.setEnabled(false);
+                    btnModificar.setEnabled(false);
+                    editarEntradas(true);
+                    txtCodigo.setEditable(false);
+                }
+            }
+            
+            if(btnEliminar.isEnabled()== false){
+            	txtCodigo.setText("" + ArregloCurso.buscar(codcurso).getCodCurso());
+                txtHoras.setText("" + ArregloCurso.buscar(codcurso).getHoras());
+                txtAsignatura.setText("" + ArregloCurso.buscar(codcurso).getAsignaturas());
+                txtCreditos.setText("" + ArregloCurso.buscar(codcurso).getCreditos());
+                cboCiclo.setSelectedIndex(ArregloCurso.buscar(codcurso).getCiclo());
+                editarEntradas(false);
+                habilitarBotones(true);
+                btnBuscar_1.setEnabled(false);
+                btnEliminar.setEnabled(false);
+            }
+            
+
+        } catch (Exception arg0) {
+            error("Ingrese un CÓDIGO valido", txtCodigo);
+        }
+    }
+	
+	//BOTÓN ACEPTAR
+	
+    protected void actionPerformedBtnAceptar_1(ActionEvent e) {
+    	try{
+			int codigoCurso = leerCodigo();
+			String asignatura = leerAsignatura();
+			if (asignatura.length() > 0){
+				int ciclo = leerCiclo();
+				try{
+					int creditos = leerCreditos();
+					try{
+						int horas = leerHoras();
+							if (btnAdicionar.isEnabled() == false) {
+								if(ArregloCurso.buscar(codigoCurso) == null){
+									int confirmacion  = validar("¿Desea registrar este curso?");
+									if(confirmacion == 0){
+									Curso nuevo = new Curso(codigoCurso, ciclo, creditos, horas, asignatura);
+									ArregloCurso.adicionar(nuevo);
+									limpieza();
+									botonesPanel2(true);
+									botonesPanel1(false);
+									editarEntradas(false);
+									}
+								}
+								else{
+									mensaje("El CÓDIGO ya existe");
+									editarEntradas(true);
+								}
+							}
+							if (btnModificar.isEnabled() == false) {
+								ArregloCurso.buscar(codigoCurso).setAsignaturas(asignatura);
+								ArregloCurso.buscar(codigoCurso).setCiclo(ciclo);
+								ArregloCurso.buscar(codigoCurso).setCreditos(creditos);
+								ArregloCurso.buscar(codigoCurso).setHoras(horas);
+								ArregloCurso.actualizarArchivo();
+								botonesPanel2(true);
+								botonesPanel1(false);
+								editarEntradas(false);
+								ArregloCurso.actualizarArchivo();
+								limpieza();
+							}
+							listar();	
+						}
+					catch(Exception arg0){
+						error("Ingrese cantidad de HORAS", txtHoras);
+					}
+				}
+				catch(Exception arg0){
+					error("Ingrese cantidad de CREDITOS", txtCreditos);
+				}
+			}
+			else{
+				error("Ingrese ASIGNATURA", txtAsignatura);
+			}
+			if(btnEliminar.isEnabled()==false){
+				if (ArregloCurso.tamaño() == 0)
+					mensaje("No hay cursos registrados");
+				else{
+					try{
+						Matricula m = ArregloMatricula.buscarCurso(codigoCurso);
+						if(m == null){
+							int confirmacion = validar("¿Desea eliminar el curso ?");
+							if (confirmacion == 0) {
+								ArregloCurso.eliminar(ArregloCurso.buscar(codigoCurso));
+								listar();
+								limpieza();
+							}
+						}
+						else
+							mensaje("Hay alumnos matriculados en este curso");
+					}
+					catch(Exception arg0){
+						txtCodigo.requestFocus();
+					}
+				}
+			}
+		}
+		catch(Exception arg0){
+			error("Ingrese CODIGO del Curso", txtCodigo);
+		}
+    }
+    
+    //MÉTODOS VOID CON PARÁMETROS
+    
+    void error(String s, JTextField txt) {
+        mensaje(s);
+        txt.setText("");
+        txt.requestFocus();
+    }
+
+    void editarEntradas(boolean sino) {
+        txtCodigo.setEditable(sino);
+        txtAsignatura.setEditable(sino);
+        txtCreditos.setEditable(sino);
+        txtHoras.setEditable(sino);
+    }
+    
+    void botonesPanel1(boolean sino){
+    	btnAceptar_1.setEnabled(sino);
+    	btnBuscar_1.setEnabled(sino);
+    }
+    
+    void botonesPanel2(boolean sino){
+    	btnAdicionar.setEnabled(sino);
+    	btnConsultar.setEnabled(sino);
+    	btnModificar.setEnabled(sino);
+    	btnEliminar.setEnabled(sino);
+    }
+    
+    void habilitarBotones(boolean sino) {
+        btnAceptar_1.setEnabled(sino);
+        btnAdicionar.setEnabled(sino);
+        btnBuscar_1.setEnabled(sino);
+        btnEliminar.setEnabled(sino);
+        btnModificar.setEnabled(sino);
+        btnConsultar.setEnabled(sino);
+
+    }
+
+    void mensaje(String s) {
+        JOptionPane.showMessageDialog(this, s, "Información", 0);
+    }
+
+    //METODOS QUE RETORNAN SIN PARÁMETROS
+    
+    int leerCodigo() {
+        return Integer.parseInt(txtCodigo.getText().trim());
+    }
+    
+    String leerAsignatura() {
+        return txtAsignatura.getText().trim();
+    }
+
+    int leerCreditos() {
+        return Integer.parseInt(txtCreditos.getText().trim());
+    }
+
+    int leerHoras() {
+        return Integer.parseInt(txtHoras.getText().trim());
+    }
+
+    int leerCiclo() {
+        return cboCiclo.getSelectedIndex();
+    }
+    
+    int validar(String s1) {
+        return JOptionPane.showConfirmDialog(this, s1);
+    }
+    
+    //METODOS VOID SIN PARÁMETROS
+    
+    void limpieza() {
+        txtCodigo.setText("");
+        txtAsignatura.setText("");
+        txtCreditos.setText("");
+        txtHoras.setText("");
+        cboCiclo.setSelectedIndex(-1);
+    }
+    
+    void listar() {
+        modelo.setRowCount(0);
+        for (int i = 0; i < ArregloCurso.tamaño(); i++) {
+
+            Object[] fila = {
+                ArregloCurso.obtener(i).getCodCurso(),
+                ArregloCurso.obtener(i).getAsignaturas(),
+                ArregloCurso.obtener(i).getCiclo(),
+                ArregloCurso.obtener(i).getCreditos(),
+                ArregloCurso.obtener(i).getHoras()
+            };
+
+            modelo.addRow(fila);
+        }
+
+    }
+  
+	public void windowActivated(WindowEvent arg0) {
+	}
+	
+	public void windowClosed(WindowEvent arg0) {
+	}
+	
+	public void windowClosing(WindowEvent arg0) {
+	}
+	
+	public void windowDeactivated(WindowEvent arg0) {
+	}
+	
+	public void windowDeiconified(WindowEvent arg0) {
+	}
+	
+	public void windowIconified(WindowEvent arg0) {
+	}
+	
+	public void windowOpened(WindowEvent arg0) {
+		if (arg0.getSource() == this) {
+			windowOpenedThis(arg0);
+		}
+	}
+	
+	protected void windowOpenedThis(WindowEvent arg0) {
+		aa = new ArregloAlumno();
+		am = new ArregloMatricula();
+		ar = new ArregloRetiro();
+		ac = new ArregloCurso();
+		listar();
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		if(e.getSource() == txtCodigo){
+			keyPressedTxtCodigo(e);
+		}
+		if(e.getSource() == txtAsignatura){
+			keyPressedTxtAsignatura(e);
+		}
+		if(e.getSource() == txtCreditos){
+			keyPressedTxtCreditos(e);
+		}
+		if(e.getSource() == txtHoras ){
+			keyPressedTxtHoras(e);
+		}
+	}
+	
+	protected void keyPressedTxtCodigo(KeyEvent e){
+		if(e.getKeyCode() == KeyEvent.VK_ENTER){
+			txtAsignatura.requestFocus();
+		}
+	}
+	
+	protected void keyPressedTxtAsignatura(KeyEvent e){
+		if(e.getKeyCode() == KeyEvent.VK_ENTER){
+			txtCreditos.requestFocus();
+		}
+	}
+	
+	protected void keyPressedTxtCreditos(KeyEvent e){
+		if(e.getKeyCode() == KeyEvent.VK_ENTER){
+			txtHoras.requestFocus();
+		}
+	}
+	
+	protected void keyPressedTxtHoras(KeyEvent e){
+		if(e.getKeyCode() == KeyEvent.VK_ENTER){
+			btnAceptar_1.doClick();
+		}
+	}
+
+
+	
+	public void keyReleased(KeyEvent e) {
+	}
+	
+	//AGREGANDO EVENTO keyTyped
+	
+	public void keyTyped(KeyEvent e) {
+		if (e.getSource() == txtHoras) {
+			keyTypedTxtHoras(e);
+		}
+		if (e.getSource() == txtCreditos) {
+			keyTypedTxtCreditos(e);
+		}
+		if (e.getSource() == txtCodigo) {
+			keyTypedTxtCodigo(e);
+		}
+	}
+	
+	//MÉTODO VOID KeyTyped, PERMITIRÁ INGRESAR UNA CIERTA CANTIDAD DE CARACTERES
+
+	protected void keyTypedTxtCodigo(KeyEvent e) {
+		if(txtCodigo.getText().length()>=4){
+			e.consume();
+			Toolkit.getDefaultToolkit().beep();
+		}
+	}
+	
+	protected void keyTypedTxtCreditos(KeyEvent e) {
+		if(txtCreditos.getText().length()>=2){
+			e.consume();
+			Toolkit.getDefaultToolkit().beep();
+		}
+	}
+	
+	protected void keyTypedTxtHoras(KeyEvent e) {
+		if(txtHoras.getText().length()>=2){
+			e.consume();
+			Toolkit.getDefaultToolkit().beep();
+		}
+	}
+	
+	//AGREGANDO EVENTO mouseClicked
+	
+	public void mouseClicked(MouseEvent e) {
+		if (e.getSource() == btnEliminar) {
+			mouseClickedBtnEliminar(e);
+		}
+		if (e.getSource() == btnModificar) {
+			mouseClickedBtnModificar(e);
+		}
+		if (e.getSource() == btnConsultar) {
+			mouseClickedBtnConsultar(e);
+		}
+		if (e.getSource() == btnAdicionar) {
+			mouseClickedBtnAdicionar(e);
+		}
+	}
+	
+	public void mouseEntered(MouseEvent e) {
+	}
+	
+	public void mouseExited(MouseEvent e) {
+	}
+	
+	public void mousePressed(MouseEvent e) {
+	}
+	
+	public void mouseReleased(MouseEvent e) {
+	}
+	
+	protected void mouseClickedBtnAdicionar(MouseEvent e) {
+		txtCodigo.requestFocus();
+	}
+	
+	protected void mouseClickedBtnConsultar(MouseEvent e) {
+		txtCodigo.requestFocus();
+	}
+	
+	protected void mouseClickedBtnModificar(MouseEvent e) {
+		txtCodigo.requestFocus();
+	}
+	
+	protected void mouseClickedBtnEliminar(MouseEvent e) {
+		txtCodigo.requestFocus();
+	}
+}

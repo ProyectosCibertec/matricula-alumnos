@@ -1,0 +1,674 @@
+package guis;
+
+import java.awt.BorderLayout;
+
+import clases.*;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import arreglos.*;
+
+import clases.Retiro;
+import libreria.Fecha;
+
+import java.awt.Color;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import javax.swing.JTextField;
+import java.awt.Panel;
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.UIManager;
+import java.awt.Toolkit;
+import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+
+public class DlgRetiro extends JDialog implements ActionListener, WindowListener, MouseListener, KeyListener {
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final JPanel contentPanel = new JPanel();
+    private JTextField txtNumRetiro;
+    private JTextField txtNumMatricula;
+    private JTextField txtAlumno;
+    private JTextField txtCurso;
+    private JLabel label;
+    private JScrollPane scrollPane;
+    private JTable tblTabla;
+    private DefaultTableModel modelo;
+    private JButton btnAdicionar;
+    private JButton btnConsultar;
+    private JButton btnModificar;
+    private JButton btnEliminar;
+    private JButton btnBuscar;
+    private JButton btnAceptar;
+    private JLabel lblCdoCurso;
+    private JTextField txtCodigoCurso;
+    ArregloAlumno aa;
+    ArregloMatricula am;
+    ArregloCurso ac;
+    ArregloRetiro ar;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        try {
+            DlgRetiro dialog = new DlgRetiro();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * CREACIÓN DEL DIALOGO.
+     */
+    public DlgRetiro() {
+    	addWindowListener(this);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(DlgRetiro.class.getResource("/img/contrato (2).png")));
+        setTitle("Registro | Retiro");
+        setBounds(100, 100, 1256, 342);
+        getContentPane().setLayout(new BorderLayout());
+        contentPanel.setBackground(new Color(0, 51, 102));
+        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        getContentPane().add(contentPanel, BorderLayout.CENTER);
+        contentPanel.setLayout(null);
+
+        JLabel lblRetiros = new JLabel("REGISTRO DE RETIROS");
+        lblRetiros.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblRetiros.setForeground(new Color(235, 242, 248));
+        lblRetiros.setBounds(434, 13, 259, 25);
+        contentPanel.add(lblRetiros);
+
+        Panel panel = new Panel();
+        panel.setBackground(new Color(235, 242, 248));
+        panel.setBounds(10, 42, 344, 234);
+        contentPanel.add(panel);
+        panel.setLayout(null);
+
+        JLabel lblNroRetiro = new JLabel("Nro. Retiro:");
+        lblNroRetiro.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        lblNroRetiro.setBounds(10, 11, 98, 14);
+        panel.add(lblNroRetiro);
+
+        JLabel lblNroMatrcula = new JLabel("Nro. Matr\u00EDcula:");
+        lblNroMatrcula.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        lblNroMatrcula.setBounds(10, 44, 98, 14);
+        panel.add(lblNroMatrcula);
+
+        JLabel lblAlumno = new JLabel("Alumno");
+        lblAlumno.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        lblAlumno.setBounds(10, 120, 62, 17);
+        panel.add(lblAlumno);
+
+        JLabel lblAsignatura = new JLabel("Curso");
+        lblAsignatura.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        lblAsignatura.setBounds(10, 153, 79, 20);
+        panel.add(lblAsignatura);
+
+        txtNumRetiro = new JTextField();
+        txtNumRetiro.addKeyListener(this);
+        txtNumRetiro.setEditable(false);
+        txtNumRetiro.setBounds(111, 9, 127, 20);
+        panel.add(txtNumRetiro);
+        txtNumRetiro.setColumns(10);
+
+        txtNumMatricula = new JTextField();
+        txtNumMatricula.addKeyListener(this);
+        txtNumMatricula.setEditable(false);
+        txtNumMatricula.setBounds(111, 42, 127, 20);
+        panel.add(txtNumMatricula);
+        txtNumMatricula.setColumns(10);
+
+        txtAlumno = new JTextField();
+        txtAlumno.setEditable(false);
+        txtAlumno.setBounds(111, 119, 221, 20);
+        panel.add(txtAlumno);
+        txtAlumno.setColumns(10);
+
+        txtCurso = new JTextField();
+        txtCurso.setEditable(false);
+        txtCurso.setBounds(111, 153, 221, 21);
+        panel.add(txtCurso);
+        txtCurso.setColumns(10);
+
+        btnBuscar = new JButton("Buscar");
+        btnBuscar.addActionListener(this);
+        btnBuscar.setBackground(UIManager.getColor("Button.background"));
+        btnBuscar.setBounds(243, 8, 89, 23);
+        panel.add(btnBuscar);
+
+        btnAceptar = new JButton("Aceptar");
+        btnAceptar.addActionListener(this);
+        btnAceptar.setBackground(UIManager.getColor("Button.background"));
+        btnAceptar.setBounds(121, 198, 89, 23);
+        panel.add(btnAceptar);
+
+        lblCdoCurso = new JLabel("Cdo. Curso:");
+        lblCdoCurso.setFont(new Font("Tahoma", Font.ITALIC, 15));
+        lblCdoCurso.setBounds(10, 80, 79, 16);
+        panel.add(lblCdoCurso);
+
+        txtCodigoCurso = new JTextField();
+        txtCodigoCurso.addKeyListener(this);
+        txtCodigoCurso.setEditable(false);
+        txtCodigoCurso.setBounds(111, 78, 127, 22);
+        panel.add(txtCodigoCurso);
+        txtCodigoCurso.setColumns(10);
+
+        btnAdicionar = new JButton("Adicionar");
+        btnAdicionar.addMouseListener(this);
+        btnAdicionar.addActionListener(this);
+        btnAdicionar.setBounds(360, 43, 155, 25);
+        contentPanel.add(btnAdicionar);
+        btnAdicionar.setBackground(UIManager.getColor("Button.background"));
+
+        btnModificar = new JButton("Modificar");
+        btnModificar.addMouseListener(this);
+        btnModificar.addActionListener(this);
+        btnModificar.setBounds(360, 217, 155, 23);
+        contentPanel.add(btnModificar);
+        btnModificar.setBackground(UIManager.getColor("Button.background"));
+
+        btnConsultar = new JButton("Consultar");
+        btnConsultar.addMouseListener(this);
+        btnConsultar.addActionListener(this);
+        btnConsultar.setBounds(360, 83, 155, 23);
+        contentPanel.add(btnConsultar);
+        btnConsultar.setBackground(UIManager.getColor("Button.background"));
+
+        btnEliminar = new JButton("Eliminar");
+        btnEliminar.addMouseListener(this);
+        btnEliminar.addActionListener(this);
+        btnEliminar.setBounds(360, 253, 155, 23);
+        contentPanel.add(btnEliminar);
+        btnEliminar.setBackground(UIManager.getColor("Button.background"));
+
+        label = new JLabel("");
+        label.setIcon(new ImageIcon(DlgRetiro.class.getResource("/img/logo-cibertec.png")));
+        label.setBounds(376, 119, 139, 86);
+        contentPanel.add(label);
+
+        scrollPane = new JScrollPane();
+        scrollPane.setBounds(527, 42, 699, 240);
+        contentPanel.add(scrollPane);
+
+        tblTabla = new JTable();
+        tblTabla.setFillsViewportHeight(true);
+        scrollPane.setViewportView(tblTabla);
+
+        modelo = new DefaultTableModel();
+        modelo.addColumn("Nro. Retiro");
+        modelo.addColumn("Nro. Matrícula");
+        modelo.addColumn("Alumno");
+        modelo.addColumn("Curso");
+        modelo.addColumn("Fecha");
+        modelo.addColumn("Hora");
+        tblTabla.setModel(modelo);
+
+    }
+ 
+    public void actionPerformed(ActionEvent arg0) {
+        if (arg0.getSource() == btnAceptar) {
+            actionPerformedBtnAceptar(arg0);
+        }
+        if (arg0.getSource() == btnBuscar) {
+            actionPerformedBtnBuscar(arg0);
+        }
+        if (arg0.getSource() == btnEliminar) {
+            actionPerformedBtnEliminar(arg0);
+        }
+        if (arg0.getSource() == btnModificar) {
+            actionPerformedBtnModificar(arg0);
+        }
+        if (arg0.getSource() == btnConsultar) {
+            actionPerformedBtnConsultar(arg0);
+        }
+        if (arg0.getSource() == btnAdicionar) {
+            actionPerformedBtnAdicionar(arg0);
+        }
+    }
+    
+    //BOTÓN ADICIONAR
+    
+    protected void actionPerformedBtnAdicionar(ActionEvent arg0) {
+        limpieza();
+        habilitarBotones(true);
+        btnAdicionar.setEnabled(false);
+        btnBuscar.setEnabled(false);
+        editarEntradas(false);
+        txtNumMatricula.setEditable(true);
+        txtNumRetiro.setText("" + ArregloRetiro.numRetiroCorrelativo());
+    }
+    
+    //BOTÓN CONSULTAR
+    
+    protected void actionPerformedBtnConsultar(ActionEvent arg0) {
+        limpieza();
+        habilitarBotones(true);
+        btnAceptar.setEnabled(false);
+        btnConsultar.setEnabled(false);
+        editarEntradas(false);
+        txtNumRetiro.setEditable(true);
+    }
+    
+    //BOTÓN MODIFICAR
+    
+    protected void actionPerformedBtnModificar(ActionEvent arg0) {
+        limpieza();
+        habilitarBotones(true);
+        btnModificar.setEnabled(false);
+        btnAceptar.setEnabled(false);
+        editarEntradas(false);
+        txtNumRetiro.setEditable(true);
+    }
+    
+    //BOTÓN ELIMINAR
+
+    protected void actionPerformedBtnEliminar(ActionEvent arg0) {
+    	limpieza();
+        habilitarBotones(true);
+        btnAceptar.setEnabled(false);
+        btnEliminar.setEnabled(false);
+        editarEntradas(false);
+        txtNumRetiro.setEditable(true);
+        
+    }
+    
+    //BOTÓN BUSCAR 
+    
+    protected void actionPerformedBtnBuscar(ActionEvent arg0) {
+        try {
+            if (btnConsultar.isEnabled() == false) {
+                buscar();
+				editarEntradas(false);
+				habilitarBotones(true);
+				btnAceptar.setEnabled(false);
+				btnBuscar.setEnabled(false);
+            }
+            if(btnModificar.isEnabled() == false){
+                buscar();
+				habilitarBotones(true);
+				btnBuscar.setEnabled(false);
+				btnModificar.setEnabled(false);
+				txtCodigoCurso.setEditable(true);
+				txtNumRetiro.setEditable(false);
+				
+            }
+            
+            if(btnEliminar.isEnabled()==false){
+            	buscar();
+            	editarEntradas(false);
+            	txtNumRetiro.setEditable(true);
+				habilitarBotones(true);
+				btnEliminar.setEnabled(false);
+            }
+        } 
+        catch (Exception e) {
+            error("Ingrese un NÚMERO valido", txtNumRetiro);
+        }
+    }
+    
+    //BOTÓN ACEPTAR
+    
+    protected void actionPerformedBtnAceptar(ActionEvent arg0) {
+        try {
+        	int numretiro = numRetiroGenerado();
+            int nummatricula = leerNumMatricula();
+            if (btnAdicionar.isEnabled() == false) {
+	            Matricula m = ArregloMatricula.buscar(nummatricula);
+                Alumno a = ArregloAlumno.buscar(m.getCodAlumno());
+                Retiro re = ArregloRetiro.buscarMatricula(nummatricula);
+                if(re == null){
+	                int confirmacion = validar(obtenerDatosAlumno() + "\n\n" + obtenerDatosCurso(), "¿Desea retirar a este alumno?");
+	                if (confirmacion == 0) {
+	                    Retiro r = new Retiro(numretiro, nummatricula, Fecha.fechaActual(), Fecha.horaActual());
+	                    ArregloRetiro.adicionar(r);
+	                    a.setEstado(2);
+	                    actualizarArchivos();
+	                    listar();
+	                    habilitarBotones(true);
+	                    botonesPanel1(false);
+	                    editarEntradas(false);
+	                    limpieza();
+	                }
+                }
+                else{
+                	mensaje("Este alumno ya está retirado");
+                }
+            }
+            if(btnModificar.isEnabled() == false) {
+                Curso c = ArregloCurso.buscar(leerCodCurso());
+                if (c != null) {
+                	int confirmacion  = JOptionPane.showConfirmDialog(this, "¿Desea registrar este curso?", "Confirmación", 0, 1, null);
+					if(confirmacion == 0){
+                	Matricula m = ArregloMatricula.buscar(nummatricula);
+					m.setCodCurso(leerCodCurso());
+					txtCurso.setText("" + c.getAsignaturas());
+					JOptionPane.showMessageDialog(this, "Se modificó el registro");
+					txtCodigoCurso.setEditable(false);
+					actualizarArchivos();
+					btnAceptar.setEnabled(false);
+					btnModificar.setEnabled(true);
+					listar();
+					limpieza();
+					}
+                }
+                else{
+                	error("Este código de curso no existe",txtCodigoCurso);
+                }
+            }
+        } 
+        catch (Exception e) {
+            error("Ingrese un NÚMERO valido", txtNumMatricula);
+        }
+        
+        if(btnEliminar.isEnabled() == false){
+        	try{
+				int numeroRetiro = leerNumRetiro();
+				Retiro r = ArregloRetiro.buscar(numeroRetiro);
+				Matricula m = ArregloMatricula.buscar(r.getNumMatricula());
+				Alumno a = ArregloAlumno.buscar(m.getCodAlumno());
+				if (a.getEstado() == 2){
+					int confirmar = validar("¿Desea eliminar el registro?", "Confirmación");
+					if(confirmar == 0){
+						ArregloRetiro.eliminar(ArregloRetiro.buscar(leerNumRetiro()));
+						a.setEstado(1);
+						actualizarArchivos();
+						listar();
+						limpieza();
+					}
+				}
+				else{
+					mensaje("El alumno no está retirado");
+				}
+			}
+        	catch(Exception e){
+				
+			}
+        }
+    }
+    
+    //MÉTODOS VOID CON PARÁMETROS 
+    void mensaje(String s) {
+        JOptionPane.showMessageDialog(this, s, "Información", 0);
+    }
+    
+    void botonesPanel1(boolean sino){
+    	btnAceptar.setEnabled(sino);
+    	btnBuscar.setEnabled(sino);
+    }
+    
+    void botonesPanel2(boolean sino){
+    	btnAdicionar.setEnabled(sino);
+    	btnConsultar.setEnabled(sino);
+    	btnModificar.setEnabled(sino);
+    	btnEliminar.setEnabled(sino);
+    }
+    void editarEntradas(boolean sino) {
+        txtNumRetiro.setEditable(sino);
+        txtAlumno.setEditable(sino);
+        txtCurso.setEditable(sino);
+        txtCodigoCurso.setEditable(sino);
+        txtNumMatricula.setEditable(sino);
+    }
+
+    void habilitarBotones(boolean sino) {
+        btnAdicionar.setEnabled(sino);
+        btnModificar.setEnabled(sino);
+        btnConsultar.setEnabled(sino);
+        btnEliminar.setEnabled(sino);
+        btnAceptar.setEnabled(sino);
+        btnBuscar.setEnabled(sino);
+        btnAceptar.setEnabled(sino);
+    }
+    
+    void error(String s, JTextField txt) {
+        mensaje(s);
+        txt.setText("");
+        txt.requestFocus();
+    }
+
+    //MÉTODOS TIPO VOID SIN PARÁMETROS
+    void limpieza() {
+        txtNumRetiro.setText("");
+        txtNumMatricula.setText("");
+        txtAlumno.setText("");
+        txtCurso.setText("");
+        txtCodigoCurso.setText("");
+    }
+    
+    void actualizarArchivos(){
+    	ArregloRetiro.actualizarArchivo();
+    	ArregloAlumno.actualizarArchivo();
+    	ArregloMatricula.actualizarArchivo();
+    	ArregloCurso.actualizarArchivo();
+    }
+    
+    void listar() {
+        modelo.setRowCount(0);
+        for (int i = 0; i < ArregloRetiro.tamaño(); i++) {
+            Matricula m = ArregloMatricula.buscar(ArregloRetiro.obtener(i).getNumMatricula());
+            Alumno a = ArregloAlumno.buscar(m.getCodAlumno());
+            Curso c = ArregloCurso.buscar(m.getCodCurso());
+            Object[] fila = {
+                ArregloRetiro.obtener(i).getNumRetiro(),
+                ArregloRetiro.obtener(i).getNumMatricula(),
+                a.getNombres() + " " + a.getApellidos(),
+                c.getAsignaturas(),
+                ArregloRetiro.obtener(i).getFecha(),
+                ArregloRetiro.obtener(i).getHora()
+            };
+            modelo.addRow(fila);
+        }
+    }
+    
+    void buscar(){
+    	int numeroRetiro = leerNumRetiro();
+		Retiro r = ArregloRetiro.buscar(numeroRetiro);
+		Matricula m = ArregloMatricula.buscar(r.getNumMatricula());
+		Curso c = ArregloCurso.buscar(m.getCodCurso());
+		Alumno a = ArregloAlumno.buscar(m.getCodAlumno());
+    	txtNumMatricula.setText("" + r.getNumMatricula());
+		txtCodigoCurso.setText("" + m.getCodCurso());
+		txtCurso.setText("" + c.getAsignaturas());
+		txtAlumno.setText("" + a.getNombres() + " " + a.getApellidos() );
+    }
+    
+    //MÉTODOS QUE RETORNAN VALORES SIN PARÁMETROS
+    int leerNumRetiro() {
+        return Integer.parseInt(txtNumRetiro.getText().trim());
+    }
+    int leerNumMatricula() {
+        return Integer.parseInt(txtNumMatricula.getText().trim());
+    }
+
+    int leerCodCurso() {
+        return Integer.parseInt(txtCodigoCurso.getText().trim());
+    }
+    
+    int numRetiroGenerado() {
+        return ArregloRetiro.numRetiroCorrelativo();
+    }
+    
+    String obtenerDatosAlumno() {
+        Matricula m = ArregloMatricula.buscar(leerNumMatricula());
+        Alumno a = ArregloAlumno.buscar(m.getCodAlumno());
+        return "Nombres :  " + a.getNombres() + "\n" +
+            "Apellidos :  " + a.getApellidos();
+    }
+    
+    String obtenerDatosCurso() {
+        Matricula m = ArregloMatricula.buscar(leerNumMatricula());
+        Curso c = ArregloCurso.buscar(m.getCodCurso());
+        return "Asignatura :  " + c.getAsignaturas();
+    }
+    
+    //MÉTODOS QUE RETORNAN VALORES CON PARÁMETROS
+    int validar(String s1, String s2) {
+        return JOptionPane.showConfirmDialog(this, s1, s2, 0, 1, null);
+    }
+
+    //MÉTODOS VOID WINDOW
+    public void windowClosed(WindowEvent e) {
+	}
+    
+	public void windowClosing(WindowEvent e) {
+	}
+	
+	public void windowDeactivated(WindowEvent e) {
+	}
+	
+	public void windowDeiconified(WindowEvent e) {
+	}
+	
+	public void windowIconified(WindowEvent e) {
+	}
+	
+	public void windowOpened(WindowEvent e) {
+		aa = new ArregloAlumno();
+		am = new ArregloMatricula();
+		ar = new ArregloRetiro();
+		ac = new ArregloCurso();
+		listar();
+	} 
+	
+	public void windowActivated(WindowEvent e) {
+		if (e.getSource() == this) {
+			windowActivatedThis(e);
+		}
+	}
+	
+	protected void windowActivatedThis(WindowEvent e) {
+		
+	}
+	
+	//AGREGANDO EVENTO MOUSE CLICKED
+	public void mouseClicked(MouseEvent arg0) {
+		if (arg0.getSource() == btnEliminar) {
+			mouseClickedBtnEliminar(arg0);
+		}
+		
+		if (arg0.getSource() == btnModificar) {
+			mouseClickedBtnModificar(arg0);
+		}
+		
+		if (arg0.getSource() == btnConsultar) {
+			mouseClickedBtnConsultar(arg0);
+		}
+		
+		if (arg0.getSource() == btnAdicionar) {
+			mouseClickedBtnAdicionar(arg0);
+		}
+	}
+	
+	public void mouseEntered(MouseEvent arg0) {
+	}
+	
+	public void mouseExited(MouseEvent arg0) {
+	}
+	
+	public void mousePressed(MouseEvent arg0) {
+	}
+	
+	public void mouseReleased(MouseEvent arg0) {
+	}
+	
+	//MÉTODO VOID mouseClicked, NOS PISICIONARÁ EN EL JTEXTFIELD A LA HORA DE DAR CLICK EN EL BOTÓN CORRESPONDIENTE
+	protected void mouseClickedBtnAdicionar(MouseEvent arg0) {
+		if(arg0.getSource() == btnAdicionar){
+			txtNumMatricula.requestFocus();
+		}
+	}
+	protected void mouseClickedBtnConsultar(MouseEvent arg0) {
+		if(arg0.getSource() == btnConsultar){
+			txtNumRetiro.requestFocus();
+		}
+	}
+	protected void mouseClickedBtnModificar(MouseEvent arg0) {
+		if(arg0.getSource() == btnModificar){
+			txtNumRetiro.requestFocus();
+		}
+	}
+	protected void mouseClickedBtnEliminar(MouseEvent arg0) {
+		if(arg0.getSource() == btnEliminar){
+			txtNumRetiro.requestFocus();
+		}
+	}
+	
+	//ADD EVENT HANDLER KEY TYPED
+	public void keyTyped(KeyEvent arg0) {
+		if (arg0.getSource() == txtCodigoCurso) {
+			keyTypedTxtCodigoCurso(arg0);
+		}
+		
+		if (arg0.getSource() == txtNumMatricula) {
+			keyTypedTxtNumMatricula(arg0);
+		}
+		
+		if (arg0.getSource() == txtNumRetiro) {
+			keyTypedTxtNumRetiro(arg0);
+		}
+	}
+	
+	public void keyPressed(KeyEvent arg0) {
+		if(arg0.getSource() == txtNumMatricula){
+			keyPressedTxtNumMatricula(arg0);
+		}
+		if(arg0.getSource() == txtNumRetiro){
+			keyPressedTxtNumRetiro(arg0);
+		}
+		
+	}
+	
+	protected void keyPressedTxtNumMatricula(KeyEvent arg0){
+		if(arg0.getKeyCode() == KeyEvent.VK_ENTER){
+			btnAceptar.doClick();
+		}
+	}
+	
+	protected void keyPressedTxtNumRetiro(KeyEvent arg0){
+		if(arg0.getKeyCode() == KeyEvent.VK_ENTER){
+			btnBuscar.doClick();
+		}
+	}
+	
+	public void keyReleased(KeyEvent arg0) {
+	}
+	
+	//MÉTODO VOID KeyTyped, PERMITIRÁ INGRESAR UNA CIERTA CANTIDAD DE CARACTERES
+	protected void keyTypedTxtNumRetiro(KeyEvent arg0) {
+		if(txtNumRetiro.getText().length() >= 6){
+			arg0.consume();
+		}
+	}
+	
+	protected void keyTypedTxtNumMatricula(KeyEvent arg0) {
+		if(txtNumMatricula.getText().length() >= 6){
+			arg0.consume();
+		}
+	}
+	
+	protected void keyTypedTxtCodigoCurso(KeyEvent arg0) {
+		if(txtCodigoCurso.getText().length() >= 4){
+			arg0.consume();
+		}
+	}
+}

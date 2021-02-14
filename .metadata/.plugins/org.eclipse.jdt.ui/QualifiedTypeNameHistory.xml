@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.awt.event.KeyEvent"/>
+<fullyQualifiedTypeName name="libreria.Fecha"/>
+<fullyQualifiedTypeName name="arreglos.ArregloAlumno"/>
+<fullyQualifiedTypeName name="arreglos.ArregloCurso"/>
+<fullyQualifiedTypeName name="arreglos.ArregloMatricula"/>
+<fullyQualifiedTypeName name="arreglos.ArregloRetiro"/>
+<fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+</qualifiedTypeNameHistroy>

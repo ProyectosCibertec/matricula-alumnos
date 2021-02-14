@@ -1,0 +1,135 @@
+package guis;
+
+import arreglos.*;
+import java.awt.BorderLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import javax.swing.JTextArea;
+import java.awt.Font;
+import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.UIManager;
+import java.awt.Toolkit;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowEvent;
+import javax.swing.JScrollPane;
+
+public class DlgAlumnosMatriculadosCurso extends JDialog implements ActionListener, WindowListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final JPanel contentPanel = new JPanel();
+	private JButton btnProcesar;
+	private JLabel label;
+	ArregloAlumno aa;
+    ArregloMatricula am;
+    ArregloCurso ac;
+    ArregloRetiro ar;
+    private JScrollPane scrollPane;
+    private JTextArea textArea;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		try {
+			DlgAlumnosMatriculadosCurso dialog = new DlgAlumnosMatriculadosCurso();
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Create the dialog.
+	 */
+	public DlgAlumnosMatriculadosCurso() {
+		addWindowListener(this);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(DlgAlumnosMatriculadosCurso.class.getResource("/img/computadora.png")));
+		setTitle("Reporte | Alumnos matriculados por curso ");
+		setBounds(100, 100, 708, 546);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(new Color(0, 51, 102));
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
+		
+		btnProcesar = new JButton("PROCESAR");
+		btnProcesar.addActionListener(this);
+		btnProcesar.setBackground(UIManager.getColor("Button.background"));
+		btnProcesar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnProcesar.setBounds(292, 55, 110, 25);
+		contentPanel.add(btnProcesar);
+		
+		label = new JLabel("ALUMNOS MATRICULADOS POR CURSO");
+		label.setForeground(new Color(235, 242, 248));
+		label.setFont(new Font("Tahoma", Font.BOLD, 20));
+		label.setBounds(138, 11, 417, 33);
+		contentPanel.add(label);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 95, 672, 401);
+		contentPanel.add(scrollPane);
+		
+		textArea = new JTextArea();
+		textArea.setFont(new Font("Monospaced", Font.BOLD, 13));
+		scrollPane.setViewportView(textArea);
+	}
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnProcesar) {
+			actionPerformedBtnProcesar(e);
+		}
+	}
+	
+	//BOTÓN PROCESAR
+
+	protected void actionPerformedBtnProcesar(ActionEvent e) {
+		for(int i = 0; i < ArregloCurso.tamaño(); i++) {
+			imprimir("Curso: " + ArregloCurso.obtener(i).getAsignaturas());
+			for(int j = 0; j < ArregloAlumno.tamaño(); j++) {
+				for(int k = 0; k < ArregloMatricula.tamaño(); k++) {
+					if(ArregloAlumno.obtener(j).getCodAlumno() == ArregloAlumno.buscar(ArregloMatricula.obtener(k).getCodAlumno()).getCodAlumno() 
+						&& ArregloCurso.obtener(i).getCodCurso() == ArregloCurso.buscar(ArregloMatricula.obtener(k).getCodCurso()).getCodCurso()) {
+						imprimir("Código:	" + ArregloAlumno.obtener(j).getCodAlumno() + " |  Nombres y Apellidos:" + ArregloAlumno.obtener(j).getNombres() + " " + ArregloAlumno.obtener(j).getApellidos());
+					}					
+				}
+			}
+		}
+	}
+	
+	//MÉTODO VOID IMPRIMIR
+	
+	public void imprimir(String texto) {
+		textArea.append(texto + "\n");
+	}
+	public void windowActivated(WindowEvent arg0) {
+	}
+	public void windowClosed(WindowEvent arg0) {
+	}
+	public void windowClosing(WindowEvent arg0) {
+	}
+	public void windowDeactivated(WindowEvent arg0) {
+	}
+	public void windowDeiconified(WindowEvent arg0) {
+	}
+	public void windowIconified(WindowEvent arg0) {
+	}
+	public void windowOpened(WindowEvent arg0) {
+		if (arg0.getSource() == this) {
+			windowOpenedThis(arg0);
+		}
+	}
+	protected void windowOpenedThis(WindowEvent arg0) {
+		aa = new ArregloAlumno();
+		am = new ArregloMatricula();
+		ar = new ArregloRetiro();
+		ac = new ArregloCurso();
+	}
+}
