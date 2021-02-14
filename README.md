@@ -2,7 +2,7 @@
 
 ## Integrantes del grupo
 
-- Santy Cortez
+- Valentín Garrido
 - Oracio Tamayo
 - Wilmer Quispe
 
